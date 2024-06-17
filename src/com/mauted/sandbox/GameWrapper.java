@@ -1,4 +1,4 @@
-package com.mauted.sandbox;
+package sandbox;
 
 import javax.swing.JFrame;
 

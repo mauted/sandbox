@@ -1,4 +1,4 @@
-package com.mauted.sandbox.sprites;
+package sandbox.sprites;
 
 import java.awt.Color;
 

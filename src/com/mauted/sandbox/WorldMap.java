@@ -1,4 +1,4 @@
-package com.mauted.sandbox;
+package sandbox;
 
 public class WorldMap {
   private Tile[][] tiles;

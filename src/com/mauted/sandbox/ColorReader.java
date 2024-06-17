@@ -1,4 +1,4 @@
-package com.mauted.sandbox;
+package sandbox;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;

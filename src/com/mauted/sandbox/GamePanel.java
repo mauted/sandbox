@@ -1,8 +1,8 @@
-package com.mauted.sandbox;
+package sandbox;
 import javax.swing.JPanel;
 
-import com.mauted.sandbox.sprites.Sprite;
-import com.mauted.sandbox.sprites.SpriteLibrary;
+import sandbox.sprites.Sprite;
+import sandbox.sprites.SpriteLibrary;
 
 import java.awt.Color;
 import java.awt.Dimension;

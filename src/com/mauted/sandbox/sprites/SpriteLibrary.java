@@ -1,4 +1,4 @@
-package com.mauted.sandbox.sprites;
+package sandbox.sprites;
 
 public enum SpriteLibrary {
   PLAYER_UP(SpriteSheet.MAIN_SHEET, ColorMap.PLAYER, 0, 0, 1, 1),

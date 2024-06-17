@@ -1,4 +1,4 @@
-package com.mauted.sandbox.sprites;
+package sandbox.sprites;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,7 +7,7 @@ import java.awt.Color;
 
 import javax.imageio.ImageIO;
 
-import com.mauted.sandbox.ColorReader;
+import sandbox.ColorReader;
 
 public class SpriteSheet {
 

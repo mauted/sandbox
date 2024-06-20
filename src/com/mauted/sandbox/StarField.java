@@ -1,7 +1,5 @@
 package sandbox;
 
-import java.awt.Color;
-
 public class StarField {
   private int numberOfStars;
   private int[] x;

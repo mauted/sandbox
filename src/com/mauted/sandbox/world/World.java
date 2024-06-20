@@ -6,18 +6,25 @@ import sandbox.GamePanel;
 import sandbox.GameWrapper;
 import sandbox.entities.Entity;
 import sandbox.entities.Player;
+import sandbox.entities.Tree;
 import sandbox.tiles.Tile;
 
 public class World {
   
   private Player player;
   private LinkedList<Entity> entities;
+  private Tree[] trees;
   private WorldMap worldMap;
 
   public World(WorldMap worldMap) {
     this.worldMap = worldMap;
     this.player = new Player(0, 0);
     this.entities = new LinkedList<Entity>();
+    this.trees = new Tree[1000];
+
+    for (int i = 0; i < trees.length; i++) {
+      trees[i] = new Tree((int) (Math.random() * worldMap.getWidth()) * Tile.DEFAULT_TILE_SIZE - worldWidth() / 2, (int) (Math.random() * worldMap.getHeight()) * Tile.DEFAULT_TILE_SIZE - worldHeight() / 2);
+    }
   }
 
   public void update() {
@@ -41,6 +48,12 @@ public class World {
         gamePanel.renderSprite(tile.getSprite(), xPos, yPos);
       }
     }
+
+    for (Tree tree : trees) {
+      int xPos = Math.round(tree.getX() - player.getX()) + GameWrapper.WIDTH / 2;
+      int yPos = Math.round(tree.getY() - player.getY()) + GameWrapper.HEIGHT / 2;
+      gamePanel.renderSprite(tree.getSprite(), xPos, yPos);
+    }
     
     player.render(gamePanel);
 
@@ -48,6 +61,18 @@ public class World {
     for (Entity entity : entities) {
       entity.render(gamePanel);
     }
+  }
+
+  public void spawnEntity(Entity entity) {
+    entities.add(entity);
+  }
+
+  public int worldWidth() {
+    return worldMap.getWidth() * Tile.DEFAULT_TILE_SIZE;
+  }
+
+  public int worldHeight() {
+    return worldMap.getHeight() * Tile.DEFAULT_TILE_SIZE;
   }
 
 }

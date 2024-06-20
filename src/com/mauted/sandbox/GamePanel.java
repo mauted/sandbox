@@ -1,8 +1,10 @@
 package sandbox;
 import javax.swing.JPanel;
 
+import sandbox.controllers.PlayerController;
 import sandbox.sprites.Sprite;
-import sandbox.sprites.SpriteLibrary;
+import sandbox.world.World;
+import sandbox.world.WorldMap;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,23 +13,20 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class GamePanel extends JPanel implements Runnable {
-
-    // Tests
-
-    private int t = 0;
-
-    // End tests
-
     private BufferedImage image;
     private Thread thread;
     private boolean running;
 
-    // private SpriteHandler spriteHandler;
+    private World world;
+    private StarField starField;
 
     public GamePanel() {
         image = new BufferedImage(GameWrapper.WIDTH, GameWrapper.HEIGHT, BufferedImage.TYPE_INT_RGB);
+        world = new World(new WorldMap(64, 64));
+        starField = new StarField(100);
         setPreferredSize(new Dimension(GameWrapper.WIDTH * GameWrapper.PIXEL_SIZE, GameWrapper.HEIGHT * GameWrapper.PIXEL_SIZE));
-
+        addKeyListener(new PlayerController(world.getPlayer()));
+        setFocusable(true);
         start();
     }
 
@@ -52,8 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-      // Update game logic here
-      t = (t + 1) % (GameWrapper.WIDTH + 16);
+      world.update();
     }
 
     private void setPixelColor(int x, int y, Color color) {
@@ -64,21 +62,18 @@ public class GamePanel extends JPanel implements Runnable {
       Graphics2D g2d = image.createGraphics();
       g2d.clearRect(0, 0, image.getWidth(), image.getHeight());
 
-      for (int j = 0; j < 20; j++) {
-        for (int i = 0; i < 20; i++) {
-          renderSprite(j % 2 == 0 ? SpriteLibrary.GRASS.getSprite() : SpriteLibrary.WATER.getSprite(), (i * 16 + t) % (GameWrapper.WIDTH + 16) - 16, j * 16);
-          if (i % 2 == 0 && j % 2 == 0) {
-            renderSprite(SpriteLibrary.TREE.getSprite(), (i * 16 + t) % (GameWrapper.WIDTH + 16) - 16, j * 16);
-          }
-        }
+      // Draw stars
+      for (int i = 0; i < starField.getNumberOfStars(); i++) {
+        setPixelColor(starField.getX(i), starField.getY(i), Color.lightGray);
       }
 
-      renderSprite(SpriteLibrary.PLAYER_DOWN.getSprite(), 80, 72);
+      // Draw world
+      world.render(this); // Lock and key mechanism to the renderSprite method
 
       g2d.dispose();
     }
 
-    private void renderSprite(Sprite sprite, int x, int y) {
+    public void renderSprite(Sprite sprite, int x, int y) {
       for (int i = 0; i < sprite.getWidth(); i++) {
         for (int j = 0; j < sprite.getHeight(); j++) {
           if (x + i >= 0 && x + i < GameWrapper.WIDTH && y + j >= 0 && y + j < GameWrapper.HEIGHT && sprite.getColor(i, j).getAlpha() == 255){

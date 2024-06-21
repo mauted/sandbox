@@ -7,28 +7,35 @@ import java.util.HashMap;
 public enum ColorMap {
 
   PLAYER(new Color[] {
+    // new Color(84, 20, 38),
     Color.black,
-    Color.orange,
-    Color.yellow,
+    new Color(214, 118, 47),
+    new Color(232, 189, 81),
     Color.white
   }),
-  GRASS(new Color[] {
-    new Color(0x224b21),
-    new Color(0x326e31),
+  GRASS_TILE(new Color[] {
+    new Color(32, 68, 52),
+    new Color(46, 98, 74),
   }),
   FIRE(new Color[] {
     Color.orange,
     Color.yellow
   }),
   WATER(new Color[] {
-    Color.blue.darker().darker(),
-    Color.blue
+    new Color(35, 32, 98),
+    new Color(40, 72, 155),
   }),
   TREE(new Color[] {
-    Color.black,
-    new Color(0x786448),
-    new Color(0x326e31),
-    new Color(0x326e31),
+    new Color(64, 54, 81),
+    new Color(86, 69, 91),
+    new Color(66, 109, 124),
+    new Color(115, 168, 142),
+  }),
+  TALL_GRASS(new Color[] {
+    new Color(25, 50, 52),
+    new Color(46, 98, 74),
+    new Color(104, 176, 72),
+    new Color(202, 218, 97),
   });
   
   private Map<Color, Color> colorMap;

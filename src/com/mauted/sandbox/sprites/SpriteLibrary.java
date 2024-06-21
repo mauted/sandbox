@@ -5,13 +5,14 @@ public enum SpriteLibrary {
   PLAYER_DOWN(SpriteSheet.MAIN_SHEET, ColorMap.PLAYER, 1, 0, 1, 1),
   PLAYER_LEFT(SpriteSheet.MAIN_SHEET, ColorMap.PLAYER, 2, 0, 1, 1),
   PLAYER_RIGHT(SpriteSheet.MAIN_SHEET, ColorMap.PLAYER, 3, 0, 1, 1),
-  GRASS(SpriteSheet.MAIN_SHEET, ColorMap.GRASS, 0, 2, 1, 1),
+  GRASS_TILE(SpriteSheet.MAIN_SHEET, ColorMap.GRASS_TILE, 0, 2, 1, 1),
   FIRE(SpriteSheet.MAIN_SHEET, ColorMap.FIRE, 0, 2, 1, 1),
   // DIRT(SpriteSheet.MAIN_SHEET, 1, 1, 1, 1),
   // STONE(SpriteSheet.MAIN_SHEET, 2, 1, 1, 1),
   WATER(SpriteSheet.MAIN_SHEET, ColorMap.WATER, 1, 2, 1, 1),
   // SAND(SpriteSheet.MAIN_SHEET, 4, 1, 1, 1);
-  TREE(SpriteSheet.MAIN_SHEET, ColorMap.TREE, 0, 3, 2, 2);
+  TREE(SpriteSheet.MAIN_SHEET, ColorMap.TREE, 0, 3, 2, 2),
+  TALL_GRASS(SpriteSheet.MAIN_SHEET, ColorMap.TALL_GRASS, 3, 1, 1, 1);
 
   private Sprite sprite;
 

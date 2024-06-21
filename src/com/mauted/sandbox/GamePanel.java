@@ -18,12 +18,10 @@ public class GamePanel extends JPanel implements Runnable {
     private boolean running;
 
     private World world;
-    private StarField starField;
 
     public GamePanel() {
         image = new BufferedImage(GameWrapper.WIDTH, GameWrapper.HEIGHT, BufferedImage.TYPE_INT_RGB);
         world = new World(new WorldMap(32, 32));
-        starField = new StarField(100);
         setPreferredSize(new Dimension(GameWrapper.WIDTH * GameWrapper.PIXEL_SIZE, GameWrapper.HEIGHT * GameWrapper.PIXEL_SIZE));
         addKeyListener(new PlayerController(world.getPlayer()));
         setFocusable(true);
@@ -61,11 +59,6 @@ public class GamePanel extends JPanel implements Runnable {
     private void render() {
       Graphics2D g2d = image.createGraphics();
       g2d.clearRect(0, 0, image.getWidth(), image.getHeight());
-
-      // Draw stars
-      for (int i = 0; i < starField.getNumberOfStars(); i++) {
-        setPixelColor(starField.getX(i), starField.getY(i), Color.lightGray);
-      }
 
       // Draw world
       world.render(this); // Lock and key mechanism to the renderSprite method

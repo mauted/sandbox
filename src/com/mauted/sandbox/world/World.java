@@ -13,18 +13,18 @@ public class World {
   
   private Player player;
   private LinkedList<Entity> entities;
-  private Tree[] trees;
+  // private Tree[] trees;
   private WorldMap worldMap;
 
   public World(WorldMap worldMap) {
     this.worldMap = worldMap;
     this.player = new Player(0, 0);
     this.entities = new LinkedList<Entity>();
-    this.trees = new Tree[100];
+    // this.trees = new Tree[100];
 
-    for (int i = 0; i < trees.length; i++) {
-      trees[i] = new Tree((int) (Math.random() * worldMap.getWidth()) * Tile.DEFAULT_TILE_SIZE, (int) (Math.random() * worldMap.getHeight()) * Tile.DEFAULT_TILE_SIZE);
-    }
+    // for (int i = 0; i < trees.length; i++) {
+    //   trees[i] = new Tree((int) (Math.random() * worldMap.getWidth()) * Tile.DEFAULT_TILE_SIZE, (int) (Math.random() * worldMap.getHeight()) * Tile.DEFAULT_TILE_SIZE);
+    // }
   }
 
   public void update() {
@@ -40,22 +40,33 @@ public class World {
 
   public void render(GamePanel gamePanel) {
 
+    int cameraX = Math.round(player.getX() + player.getWidth() / 2 - GameWrapper.WIDTH / 2);
+    int cameraY = Math.round(player.getY() + player.getHeight() / 2 - GameWrapper.HEIGHT / 2);
+
+    cameraX = Math.max(0, cameraX);
+    cameraX = Math.min(worldWidth() - GameWrapper.WIDTH, cameraX);
+
+    cameraY = Math.max(0, cameraY);
+    cameraY = Math.min(worldHeight() - GameWrapper.HEIGHT, cameraY);
+
     for (int x = 0; x < worldMap.getWidth(); x++) {
       for (int y = 0; y < worldMap.getHeight(); y++) {
         Tile tile = worldMap.getTile(x, y);
-        int xPos = Math.round(tile.getX() - player.getX()) + GameWrapper.WIDTH / 2;
-        int yPos = Math.round(tile.getY() - player.getY()) + GameWrapper.HEIGHT / 2;
+        int xPos = Math.round(tile.getX() - cameraX);
+        int yPos = Math.round(tile.getY() - cameraY);
         gamePanel.renderSprite(tile.getSprite(), xPos, yPos);
       }
     }
 
-    for (Tree tree : trees) {
-      int xPos = Math.round(tree.getX() - player.getX()) + GameWrapper.WIDTH / 2;
-      int yPos = Math.round(tree.getY() - player.getY()) + GameWrapper.HEIGHT / 2;
-      gamePanel.renderSprite(tree.getSprite(), xPos, yPos);
-    }
+    // for (Tree tree : trees) {
+    //   int xPos = Math.round(tree.getX() - cameraX);
+    //   int yPos = Math.round(tree.getY() - cameraY);
+    //   gamePanel.renderSprite(tree.getSprite(), xPos, yPos);
+    // }
     
-    player.render(gamePanel);
+    int xPos = Math.round(player.getX() - cameraX);
+    int yPos = Math.round(player.getY() - cameraY);
+    gamePanel.renderSprite(player.getSprite(), xPos, yPos);
 
 
     for (Entity entity : entities) {

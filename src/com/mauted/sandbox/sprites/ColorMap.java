@@ -13,8 +13,8 @@ public enum ColorMap {
     Color.white
   }),
   GRASS(new Color[] {
-    new Color(0, 100, 0),
-    new Color(0, 200, 0),
+    new Color(0x224b21),
+    new Color(0x326e31),
   }),
   FIRE(new Color[] {
     Color.orange,
@@ -26,9 +26,9 @@ public enum ColorMap {
   }),
   TREE(new Color[] {
     Color.black,
-    new Color(0x8B4513),
-    new Color(0, 50, 0),
-    new Color(0, 70, 0)
+    new Color(0x786448),
+    new Color(0x326e31),
+    new Color(0x326e31),
   });
   
   private Map<Color, Color> colorMap;

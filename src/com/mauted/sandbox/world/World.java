@@ -20,10 +20,10 @@ public class World {
     this.worldMap = worldMap;
     this.player = new Player(0, 0);
     this.entities = new LinkedList<Entity>();
-    this.trees = new Tree[1000];
+    this.trees = new Tree[100];
 
     for (int i = 0; i < trees.length; i++) {
-      trees[i] = new Tree((int) (Math.random() * worldMap.getWidth()) * Tile.DEFAULT_TILE_SIZE - worldWidth() / 2, (int) (Math.random() * worldMap.getHeight()) * Tile.DEFAULT_TILE_SIZE - worldHeight() / 2);
+      trees[i] = new Tree((int) (Math.random() * worldMap.getWidth()) * Tile.DEFAULT_TILE_SIZE, (int) (Math.random() * worldMap.getHeight()) * Tile.DEFAULT_TILE_SIZE);
     }
   }
 

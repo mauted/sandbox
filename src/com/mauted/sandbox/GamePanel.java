@@ -22,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public GamePanel() {
         image = new BufferedImage(GameWrapper.WIDTH, GameWrapper.HEIGHT, BufferedImage.TYPE_INT_RGB);
-        world = new World(new WorldMap(64, 64));
+        world = new World(new WorldMap(32, 32));
         starField = new StarField(100);
         setPreferredSize(new Dimension(GameWrapper.WIDTH * GameWrapper.PIXEL_SIZE, GameWrapper.HEIGHT * GameWrapper.PIXEL_SIZE));
         addKeyListener(new PlayerController(world.getPlayer()));

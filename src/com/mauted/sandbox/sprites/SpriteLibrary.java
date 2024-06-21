@@ -11,7 +11,7 @@ public enum SpriteLibrary {
   // STONE(SpriteSheet.MAIN_SHEET, 2, 1, 1, 1),
   WATER(SpriteSheet.MAIN_SHEET, ColorMap.WATER, 1, 2, 1, 1),
   // SAND(SpriteSheet.MAIN_SHEET, 4, 1, 1, 1);
-  TREE(SpriteSheet.MAIN_SHEET, ColorMap.TREE, 0, 1, 1, 1);
+  TREE(SpriteSheet.MAIN_SHEET, ColorMap.TREE, 0, 3, 2, 2);
 
   private Sprite sprite;
 

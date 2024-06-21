@@ -1,7 +1,6 @@
 package sandbox.world;
 
-import sandbox.tiles.GrassTile;
-import sandbox.tiles.Tile;
+import sandbox.tiles.*;
 
 public class WorldMap {
 
@@ -11,8 +10,8 @@ public class WorldMap {
     tiles = new Tile[width][height];
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
-        int tileX = (x - width / 2) * Tile.DEFAULT_TILE_SIZE;
-        int tileY = (y - height / 2) * Tile.DEFAULT_TILE_SIZE;
+        int tileX = x * Tile.DEFAULT_TILE_SIZE;
+        int tileY = y * Tile.DEFAULT_TILE_SIZE;
         tiles[x][y] = new GrassTile(tileX, tileY);
       }
     }

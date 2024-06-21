@@ -7,7 +7,7 @@ import sandbox.sprites.SpriteLibrary;
 public class Player extends Entity {
 
   public Player(int x, int y) {
-    super(SpriteLibrary.PLAYER_DOWN.getSprite(), x, y, 2, 100);
+    super(SpriteLibrary.PLAYER_DOWN.getSprite(), x, y, 1, 100);
   }
 
   public void render(GamePanel gamePanel) {

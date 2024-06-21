@@ -2,9 +2,9 @@
 
 A proof-of-concept, fun project to emulate retro-style video game graphics using limited color palettes and screen resolution. [Try it](#install-and-use)!
 
-<img width="752" alt="image" src="https://github.com/mauriciotedeschi/Sandbox/assets/63406974/8fbcc09d-7daa-40e8-a03d-2165a66659b6">
+<img width="752" alt="image" src="https://github.com/mauted/sandbox/assets/63406974/0e7f550f-19fe-4b40-8110-f95ff07f6251">
 
-<img width="752" alt="image" src="https://github.com/mauriciotedeschi/sandbox/assets/63406974/1eef279a-bb62-43c2-91ae-f6310021f9cb">
+<img width="752" alt="image" src="https://github.com/mauted/sandbox/assets/63406974/9b57a7fb-7a80-4153-bd6f-ec1db8e11038">
 
 ## Install and use
 

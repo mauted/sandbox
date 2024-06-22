@@ -1,4 +1,4 @@
-# sandbox - the small retro game graphics library
+![image](https://github.com/mauted/sandbox/assets/63406974/c762e56e-fa14-4861-af6b-27abacaddd21)
 
 A proof-of-concept, fun project to emulate retro-style video game graphics using limited color palettes and screen resolution. [Try it](#install-and-use)!
 

@@ -12,7 +12,7 @@ public class WorldMap {
       for (int y = 0; y < height; y++) {
         int tileX = x * Tile.DEFAULT_TILE_SIZE;
         int tileY = y * Tile.DEFAULT_TILE_SIZE;
-        tiles[x][y] = (x/2+y/2) % 2 == 0 ? new WaterTile(tileX, tileY) : new GrassTile(tileX, tileY);
+        tiles[x][y] = new GrassTile(tileX, tileY);
       }
     }
   }

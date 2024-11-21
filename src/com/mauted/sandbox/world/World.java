@@ -1,89 +1,91 @@
 package sandbox.world;
 
-import java.util.LinkedList;
+import java.util.HashSet;
 
+import sandbox.Camera;
+import sandbox.CollisionChecker;
+import sandbox.GameObject;
 import sandbox.GamePanel;
-import sandbox.GameWrapper;
-import sandbox.entities.Entity;
-import sandbox.entities.Player;
-import sandbox.entities.Tree;
+import sandbox.entities.*;
+import sandbox.plants.Tree;
 import sandbox.tiles.Tile;
 
 public class World {
   
-  private Player player;
-  private LinkedList<Entity> entities;
-  private Tree[] trees;
-  private WorldMap worldMap;
+    private Player player;
+    private HashSet<GameObject> objects;
+    private WorldMap worldMap;
+    private Camera camera;
+    private CollisionChecker collisionChecker;
 
-  public World(WorldMap worldMap) {
-    this.worldMap = worldMap;
-    this.player = new Player(0, 0);
-    this.entities = new LinkedList<Entity>();
-    this.trees = new Tree[100];
+    public World(WorldMap worldMap) {
+        this.worldMap = worldMap;
+        this.player = new Player(worldWidth() / 2, worldHeight() / 2);
+        this.objects = new HashSet<GameObject>();
+        this.camera = new Camera(player, worldWidth(), worldHeight());
+        this.collisionChecker = new CollisionChecker(worldWidth(), worldHeight());
 
-    for (int i = 0; i < trees.length; i++) {
-      trees[i] = new Tree((int) (Math.random() * worldMap.getWidth()) * Tile.DEFAULT_TILE_SIZE, (int) (Math.random() * worldMap.getHeight()) * Tile.DEFAULT_TILE_SIZE);
-    }
-  }
+        for (int i = 0; i < 100; i++) {
+            Tree tree = new Tree(randomX(), randomY());
+            for (GameObject other : this.objects) {
+                if (other instanceof Tree && collisionChecker.isColliding(tree, other)) {
+                    tree = new Tree(randomX(), randomY());
+                }
+            }
+            this.spawnObject(tree);
+        }
 
-  public void update() {
-    player.update();
-    for (Entity entity : entities) {
-      entity.update();
-    }
-  }
+        for (int i = 0; i < 200; i++) {
+            this.spawnObject(new Chicken(randomX(), randomY()));
+        }
 
-  public Player getPlayer() {
-    return player;
-  }
-
-  public void render(GamePanel gamePanel) {
-
-    int cameraX = Math.round(player.getX() + player.getWidth() / 2 - GameWrapper.WIDTH / 2);
-    int cameraY = Math.round(player.getY() + player.getHeight() / 2 - GameWrapper.HEIGHT / 2);
-
-    cameraX = Math.max(0, cameraX);
-    cameraX = Math.min(worldWidth() - GameWrapper.WIDTH, cameraX);
-
-    cameraY = Math.max(0, cameraY);
-    cameraY = Math.min(worldHeight() - GameWrapper.HEIGHT, cameraY);
-
-    for (int x = 0; x < worldMap.getWidth(); x++) {
-      for (int y = 0; y < worldMap.getHeight(); y++) {
-        Tile tile = worldMap.getTile(x, y);
-        int xPos = Math.round(tile.getX() - cameraX);
-        int yPos = Math.round(tile.getY() - cameraY);
-        gamePanel.renderSprite(tile.getSprite(), xPos, yPos);
-      }
+        this.spawnObject(player); // Spawn the player
     }
 
-    for (Tree tree : trees) {
-      int xPos = Math.round(tree.getX() - cameraX);
-      int yPos = Math.round(tree.getY() - cameraY);
-      gamePanel.renderSprite(tree.getSprite(), xPos, yPos);
+    private int randomX() {
+        return (int) (Math.random() * worldMap.getWidth()) * Tile.DEFAULT_TILE_SIZE;
     }
-    
-    int xPos = Math.round(player.getX() - cameraX);
-    int yPos = Math.round(player.getY() - cameraY);
-    gamePanel.renderSprite(player.getSprite(), xPos, yPos);
 
-
-    for (Entity entity : entities) {
-      entity.render(gamePanel);
+    private int randomY() {
+        return (int) (Math.random() * worldMap.getHeight()) * Tile.DEFAULT_TILE_SIZE;
     }
-  }
 
-  public void spawnEntity(Entity entity) {
-    entities.add(entity);
-  }
+    public void update() {
+        for (GameObject obj : this.objects) {
+            obj.update();
+            collisionChecker.constrainToBounds(obj);
+            // for (GameObject other : this.objects) {
+            //     if (obj != other && !(other instanceof Tree)) {
+            //         collisionChecker.resolveCollision(obj, other);
+            //     }
+            // }
+        }
+    }
 
-  public int worldWidth() {
-    return worldMap.getWidth() * Tile.DEFAULT_TILE_SIZE;
-  }
+    public Player getPlayer() {
+        return player;
+    }
 
-  public int worldHeight() {
-    return worldMap.getHeight() * Tile.DEFAULT_TILE_SIZE;
-  }
+    public void render(GamePanel gamePanel) {
+        this.worldMap.render(gamePanel, this.camera);  
+
+        for (GameObject entity : this.objects) {
+            entity.render(gamePanel, this.camera);
+        }
+
+        player.render(gamePanel, this.camera);
+    }
+
+    public void spawnObject(GameObject o) {
+        objects.add(o);
+    }
+
+    public int worldWidth() {
+        return worldMap.getWidth() * Tile.DEFAULT_TILE_SIZE;
+    }
+
+    public int worldHeight() {
+        return worldMap.getHeight() * Tile.DEFAULT_TILE_SIZE;
+    }
 
 }

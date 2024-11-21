@@ -3,15 +3,16 @@ package sandbox;
 import sandbox.sprites.Sprite;
 
 public class GameObject {
-  private float x;
-  private float y;
+  private double x;
+  private double y;
   private int width;
   private int height;
 
   private Sprite sprite;
   private boolean visible;
+//   private boolean isRigidBody;
 
-  public GameObject(Sprite sprite, float x, float y) {
+  public GameObject(Sprite sprite, double x, double y) {
     this.sprite = sprite;
     this.x = x;
     this.y = y;
@@ -24,7 +25,7 @@ public class GameObject {
     // Do nothing
   }
 
-  public void move(float dx, float dy) {
+  public void move(double dx, double dy) {
     x += dx;
     y += dy;
   }
@@ -37,16 +38,21 @@ public class GameObject {
     this.visible = isVisible;
   }
 
-  public float getX() {
+  public double getX() {
     return x;
   }
 
-  public float getY() {
+  public double getY() {
     return y;
   }
 
   public int getWidth() {
     return width;
+  }
+
+  public void moveTo(double x, double y) {
+    this.x = x;
+    this.y = y;
   }
 
   public int getHeight() {
@@ -61,8 +67,10 @@ public class GameObject {
     this.sprite = sprite;
   }
 
-  public void render(GamePanel gamePanel) {
-    // do nothing
+  public void render(GamePanel gamePanel, Camera camera) {
+    int x = (int) Math.round(this.x - camera.getCameraX());
+    int y = (int) Math.round(this.y - camera.getCameraY());
+    gamePanel.renderSprite(sprite, x, y);
   }
   
 }

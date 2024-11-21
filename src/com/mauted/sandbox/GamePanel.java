@@ -49,31 +49,31 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-      world.update();
+        world.update();
     }
 
     private void setPixelColor(int x, int y, Color color) {
-      image.setRGB(x, y, color.getRGB());
+        image.setRGB(x, y, color.getRGB());
     }
 
     private void render() {
-      Graphics2D g2d = image.createGraphics();
-      g2d.clearRect(0, 0, image.getWidth(), image.getHeight());
+        Graphics2D g2d = image.createGraphics();
+        g2d.clearRect(0, 0, image.getWidth(), image.getHeight());
 
-      // Draw world
-      world.render(this); // Lock and key mechanism to the renderSprite method
+        // Draw world
+        world.render(this); // Lock and key mechanism to the renderSprite method
 
-      g2d.dispose();
+        g2d.dispose();
     }
 
     public void renderSprite(Sprite sprite, int x, int y) {
-      for (int i = 0; i < sprite.getWidth(); i++) {
-        for (int j = 0; j < sprite.getHeight(); j++) {
-          if (x + i >= 0 && x + i < GameWrapper.WIDTH && y + j >= 0 && y + j < GameWrapper.HEIGHT && sprite.getColor(i, j).getAlpha() == 255){
-            setPixelColor(x + i, y + j, sprite.getColor(i, j));
-          }
+        for (int i = 0; i < sprite.getWidth(); i++) {
+            for (int j = 0; j < sprite.getHeight(); j++) {
+                if (x + i >= 0 && x + i < GameWrapper.WIDTH && y + j >= 0 && y + j < GameWrapper.HEIGHT && sprite.getColor(i, j).getAlpha() == 255){
+                    setPixelColor(x + i, y + j, sprite.getColor(i, j));
+                }
+            }
         }
-      }
     }
 
     @Override

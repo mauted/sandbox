@@ -2,6 +2,11 @@ package sandbox.sprites;
 
 import java.awt.Color;
 
+/**
+ * An encoding of a sprite image.
+ * 
+ * @param x thing
+ */
 public class Sprite {
 
   private int x; // x position on spreadsheet

@@ -1,5 +1,7 @@
 package sandbox.world;
 
+import sandbox.Camera;
+import sandbox.GamePanel;
 import sandbox.tiles.*;
 
 public class WorldMap {
@@ -15,6 +17,15 @@ public class WorldMap {
         tiles[x][y] = new GrassTile(tileX, tileY);
       }
     }
+  }
+
+  public void render(GamePanel gamePanel, Camera camera) {
+    for (int x = 0; x < this.getWidth(); x++) {
+        for (int y = 0; y < this.getHeight(); y++) {
+            Tile tile = this.getTile(x, y);
+            tile.render(gamePanel, camera);
+        }
+    }  
   }
 
   public Tile getTile(int x, int y) {

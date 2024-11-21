@@ -15,7 +15,11 @@ public class SpriteSheet {
   private ColorReader colorReader;
   private int cellSize; // Based on the sprite sheet, you must set this manually!
 
+  public static final int DEFAULT_CELL_SIZE = 16;
+  
   public static final SpriteSheet MAIN_SHEET = new SpriteSheet("res/spritesheet.png");
+  public static final SpriteSheet PARTICLE_SPRITE_SHEET = new SpriteSheet("res/particles.png");
+  public static final SpriteSheet PLAYER = new SpriteSheet("res/player.png");
 
   public SpriteSheet(String filename, int cellSize) {
     this.cellSize = cellSize;
@@ -33,7 +37,7 @@ public class SpriteSheet {
   }
 
   public SpriteSheet(String filename) {
-    this(filename, 16);
+    this(filename, DEFAULT_CELL_SIZE);
   }
 
   public BufferedImage getImage() {

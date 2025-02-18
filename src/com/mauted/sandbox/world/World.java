@@ -3,11 +3,9 @@ package sandbox.world;
 import java.util.HashSet;
 
 import sandbox.Camera;
-import sandbox.CollisionChecker;
 import sandbox.GameObject;
 import sandbox.GamePanel;
 import sandbox.entities.*;
-import sandbox.plants.Tree;
 import sandbox.tiles.Tile;
 
 public class World {
@@ -16,26 +14,24 @@ public class World {
     private HashSet<GameObject> objects;
     private WorldMap worldMap;
     private Camera camera;
-    private CollisionChecker collisionChecker;
 
     public World(WorldMap worldMap) {
         this.worldMap = worldMap;
         this.player = new Player(worldWidth() / 2, worldHeight() / 2);
         this.objects = new HashSet<GameObject>();
         this.camera = new Camera(player, worldWidth(), worldHeight());
-        this.collisionChecker = new CollisionChecker(worldWidth(), worldHeight());
+
+        // for (int i = 0; i < 100; i++) {
+        //     Tree tree = new Tree(randomX(), randomY());
+        //     for (GameObject other : this.objects) {
+        //         if (other instanceof Tree && collisionChecker.isColliding(tree, other)) {
+        //             tree = new Tree(randomX(), randomY());
+        //         }
+        //     }
+        //     this.spawnObject(tree);
+        // }
 
         for (int i = 0; i < 100; i++) {
-            Tree tree = new Tree(randomX(), randomY());
-            for (GameObject other : this.objects) {
-                if (other instanceof Tree && collisionChecker.isColliding(tree, other)) {
-                    tree = new Tree(randomX(), randomY());
-                }
-            }
-            this.spawnObject(tree);
-        }
-
-        for (int i = 0; i < 200; i++) {
             this.spawnObject(new Chicken(randomX(), randomY()));
         }
 
@@ -53,12 +49,18 @@ public class World {
     public void update() {
         for (GameObject obj : this.objects) {
             obj.update();
-            collisionChecker.constrainToBounds(obj);
-            // for (GameObject other : this.objects) {
-            //     if (obj != other && !(other instanceof Tree)) {
-            //         collisionChecker.resolveCollision(obj, other);
-            //     }
-            // }
+            obj.constrainToBounds(0, 0, worldWidth(), worldHeight());
+
+            boolean flag = false;
+            for (GameObject other : this.objects) {
+                if (obj != other) {
+                    if (obj.intersects(other)) {
+                        flag = (other instanceof Player);
+                        obj.onCollision(other);
+                    }
+                }
+            }
+            obj.setVisibleHitbox(flag);
         }
     }
 

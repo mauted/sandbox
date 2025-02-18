@@ -76,11 +76,34 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    public void renderHitbox(int x, int y, int width, int height) {
+        // Draw boundary red
+        for (int i = 0; i < width; i++) {
+            setPixelColor(x + i, y, Color.RED);
+            setPixelColor(x + i, y + height, Color.RED);
+        }
+        for (int i = 0; i < height; i++) {
+            setPixelColor(x, y + i, Color.RED);
+            setPixelColor(x + width, y + i, Color.RED);
+        }
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        g2d.drawImage(image, 0, 0, GameWrapper.WIDTH * GameWrapper.PIXEL_SIZE, GameWrapper.HEIGHT * GameWrapper.PIXEL_SIZE, null);
+        int x = GameWrapper.PADDING * GameWrapper.PIXEL_SIZE;
+        int y = GameWrapper.PADDING * GameWrapper.PIXEL_SIZE;
+
+        int width = GameWrapper.WIDTH * GameWrapper.PIXEL_SIZE;
+        int height = GameWrapper.HEIGHT * GameWrapper.PIXEL_SIZE;
+
+        int padding = 2 * GameWrapper.PADDING * GameWrapper.PIXEL_SIZE;
+
+        // Make the padding black
+        g2d.setColor(Color.BLACK);
+        g2d.fillRect(0, 0, width + padding, height + padding);
+        g2d.drawImage(image, x, y, width, height, null);
     }
 }

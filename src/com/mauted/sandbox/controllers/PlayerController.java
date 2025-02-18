@@ -15,16 +15,16 @@ public class PlayerController extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        if (key == KeyEvent.VK_LEFT) {
+        if (key == KeyEvent.VK_A) {
             player.setDx(-player.getMaxSpeed());
             // player.setSprite(SpriteLibrary.PLAYER_LEFT.getSprite());
-        } else if (key == KeyEvent.VK_RIGHT) {
+        } else if (key == KeyEvent.VK_D) {
             player.setDx(player.getMaxSpeed());
             // player.setSprite(SpriteLibrary.PLAYER_RIGHT.getSprite());
-        } else if (key == KeyEvent.VK_UP) {
+        } else if (key == KeyEvent.VK_W) {
             player.setDy(-player.getMaxSpeed());
             // player.setSprite(SpriteLibrary.PLAYER_UP.getSprite());
-        } else if (key == KeyEvent.VK_DOWN) {
+        } else if (key == KeyEvent.VK_S) {
             player.setDy(player.getMaxSpeed());
             // player.setSprite(SpriteLibrary.PLAYER_DOWN.getSprite());
         }
@@ -34,9 +34,9 @@ public class PlayerController extends KeyAdapter {
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT) {
+        if (key == KeyEvent.VK_A || key == KeyEvent.VK_D) {
             player.setDx(0);
-        } else if (key == KeyEvent.VK_UP || key == KeyEvent.VK_DOWN) {
+        } else if (key == KeyEvent.VK_W || key == KeyEvent.VK_S) {
             player.setDy(0);
         }
         player.onKeyEvent();

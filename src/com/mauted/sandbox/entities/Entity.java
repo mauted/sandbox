@@ -16,6 +16,8 @@ public class Entity extends GameObject {
     private double dy;
     private double maxSpeed;
     private int hitPoints;
+
+    // TODO Implement mass for collision detection
     
     public Entity(Sprite sprite, double x, double y, double maxSpeed, int hitPoints) {
         super(sprite, x, y);
@@ -52,6 +54,36 @@ public class Entity extends GameObject {
     public void setVelocity(double dx, double dy) {
         this.setDx(dx);
         this.setDy(dy);
+    }
+
+    public void addToVelocity(double dx, double dy) {
+        this.dx += dx;
+        this.dy += dy;
+    }
+
+    public void onCollision(GameObject other) {
+        double centerAX = this.getX() + this.getWidth() / 2;
+        double centerAY = this.getY() + this.getHeight() / 2;
+        double centerBX = other.getX() + other.getWidth() / 2;
+        double centerBY = other.getY() + other.getHeight() / 2;
+        double deltaX = centerBX - centerAX;
+        double deltaY = centerBY - centerAY;
+
+        // Set a lower bound to prevent division by 0, although nearly impossible.
+        double mag = Math.max(0.001, Math.sqrt(deltaX * deltaX + deltaY * deltaY));
+
+        double unitDeltaX = deltaX / mag / mag;
+        double unitDeltaY = deltaY / mag / mag;
+
+        if (other instanceof Entity) {
+            this.move(-unitDeltaX * this.getMaxSpeed(), -unitDeltaY * this.getMaxSpeed());
+        }
+        else if (Math.abs(deltaX) < Math.abs(deltaY)) {
+            this.move(0, -this.getDy());
+        }
+        else {
+            this.move(-this.getDx(), 0);
+        }
     }
 
     public double getDx() {

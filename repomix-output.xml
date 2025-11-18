@@ -1,0 +1,1364 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+src/
+  com/
+    mauted/
+      sandbox/
+        controllers/
+          PlayerController.java
+        entities/
+          Chicken.java
+          Entity.java
+          Mob.java
+          PeacefulMob.java
+          PeacefulMobState.java
+          Player.java
+        plants/
+          Flower.java
+          Plant.java
+          Tree.java
+        sprites/
+          ColorMap.java
+          Sprite.java
+          SpriteLibrary.java
+          SpriteSheet.java
+        tiles/
+          FireTile.java
+          GrassTile.java
+          Tile.java
+          WaterTile.java
+        world/
+          World.java
+          WorldMap.java
+        Camera.java
+        CollisionChecker.java
+        ColorReader.java
+        GameObject.java
+        GamePanel.java
+        GameWrapper.java
+        StarField.java
+README.md
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="src/com/mauted/sandbox/entities/PeacefulMob.java">
+package sandbox.entities;
+
+import sandbox.sprites.Sprite;
+
+
+public class PeacefulMob extends Mob<PeacefulMobState> {
+
+    private int clock;
+
+    public PeacefulMob(Sprite sprite, double x, double y, double maxSpeed, int hitPoints, PeacefulMobState initialState) {
+        super(sprite, x, y, maxSpeed, hitPoints, initialState);
+        this.clock = (int) (Math.random() * 180);
+    }
+
+    /**
+     * Use this constructor by default.
+     * @param sprite
+     * @param x
+     * @param y
+     * @param maxSpeed
+     * @param hitPoints
+     */
+    public PeacefulMob(Sprite sprite, double x, double y, double maxSpeed, int hitPoints) {
+        this(sprite, x, y, maxSpeed, hitPoints, PeacefulMobState.IDLE);
+    }
+
+    public void update() {
+        super.update();
+        this.clock--;
+
+        if (this.clock == 0) {
+            switch (this.getState()) {
+                case IDLE:
+                    this.clock = 60;
+                    double a = Math.random() * 2 * Math.PI;
+                    this.setVelocity(this.getMaxSpeed() * Math.cos(a), this.getMaxSpeed() * Math.sin(a));
+                    this.setState(PeacefulMobState.MOBILE);
+                    break;
+                case MOBILE:
+                    this.clock = 180;
+                    this.setVelocity(0, 0);
+                    this.setState(PeacefulMobState.IDLE);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+
+    
+}
+</file>
+
+<file path="src/com/mauted/sandbox/entities/PeacefulMobState.java">
+package sandbox.entities;
+
+public enum PeacefulMobState {
+    IDLE,
+    MOBILE,
+    HURT,
+    PANIC,
+}
+</file>
+
+<file path="src/com/mauted/sandbox/plants/Flower.java">
+package sandbox.plants;
+
+import sandbox.sprites.SpriteLibrary;
+
+public class Flower extends Plant {
+    public Flower(double x, double y) {
+        super(SpriteLibrary.FLOWER.getSprite(), x, y);
+    }
+}
+</file>
+
+<file path="src/com/mauted/sandbox/plants/Plant.java">
+package sandbox.plants;
+
+import sandbox.GameObject;
+import sandbox.sprites.Sprite;
+
+public class Plant extends GameObject {
+
+    private enum LifeStage {
+        LEVEL_0,
+        LEVEL_1,
+        LEVEL_2,
+        LEVEL_3;
+
+        private int maxAge;
+        private Sprite sprite;
+
+        public void setMaxAge(int maxAge) {
+            this.maxAge = maxAge;
+        }
+
+        public void setSprite(Sprite sprite) {
+            this.sprite = sprite;
+        }
+    }
+
+    private LifeStage lifeStage;
+
+    public Plant(Sprite sprite, double x, double y) {
+        super(sprite, x, y);
+        this.lifeStage = LifeStage.LEVEL_0;
+    }
+
+}
+</file>
+
+<file path="src/com/mauted/sandbox/plants/Tree.java">
+package sandbox.plants;
+
+import sandbox.sprites.SpriteLibrary;
+
+public class Tree extends Plant {
+
+    public Tree(double x, double y) {
+        super(SpriteLibrary.TREE.getSprite(), x, y);
+    }
+  
+}
+</file>
+
+<file path="src/com/mauted/sandbox/tiles/FireTile.java">
+package sandbox.tiles;
+
+import sandbox.sprites.SpriteLibrary;
+
+public class FireTile extends Tile {
+
+  public FireTile(float x, float y) {
+    super(SpriteLibrary.FIRE.getSprite(), x, y);
+  }
+  
+}
+</file>
+
+<file path="src/com/mauted/sandbox/tiles/WaterTile.java">
+package sandbox.tiles;
+
+import sandbox.sprites.SpriteLibrary;
+
+public class WaterTile extends Tile {
+
+  public WaterTile(float x, float y) {
+    super(SpriteLibrary.WATER.getSprite(), x, y);
+  }
+  
+}
+</file>
+
+<file path="src/com/mauted/sandbox/Camera.java">
+package sandbox;
+
+import sandbox.entities.Player;
+
+public class Camera {
+    private Player player;
+    private int upperX, upperY;
+
+    public Camera(Player player, int upperX, int upperY) {
+        this.player = player;
+        this.upperX = upperX;
+        this.upperY = upperY;
+    }
+
+    public int getCameraX() {
+        // Center the camera on the player
+        int pos = (int) Math.round(player.getX() + player.getWidth() / 2 - GameWrapper.WIDTH / 2);
+        // Constrain the camera to prevent the world border from crossing the wrapper
+        pos = Math.max(0, pos);
+        pos = Math.min(upperX - GameWrapper.WIDTH, pos);
+        return pos;
+    }
+    
+    public int getCameraY() {
+        // Center the camera on the player
+        int pos = (int) Math.round(player.getY() + player.getHeight() / 2 - GameWrapper.HEIGHT / 2);
+        // Constrain the camera to prevent the world border from crossing the wrapper
+        pos = Math.max(0, pos);
+        pos = Math.min(upperY - GameWrapper.HEIGHT, pos);
+        return pos;
+    }
+
+}
+</file>
+
+<file path="src/com/mauted/sandbox/entities/Chicken.java">
+package sandbox.entities;
+
+import sandbox.sprites.SpriteLibrary;
+
+public class Chicken extends PeacefulMob {
+
+    public Chicken(double x, double y) {
+        super(SpriteLibrary.CHICKEN.getSprite(), x, y, 0.6, 10);
+    }
+    
+}
+</file>
+
+<file path="src/com/mauted/sandbox/entities/Mob.java">
+package sandbox.entities;
+
+import sandbox.sprites.Sprite;
+
+public class Mob<State extends Enum<State>> extends Entity {
+    
+    private State state;
+
+    public Mob(Sprite sprite, double x, double y, double maxSpeed, int hitPoints, State initialState) {
+        super(sprite, x, y, maxSpeed, hitPoints);
+        this.state = initialState;
+    }
+
+    public State getState() {
+        return this.state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public void update() {
+        super.update();
+    }
+
+}
+</file>
+
+<file path="src/com/mauted/sandbox/sprites/SpriteSheet.java">
+package sandbox.sprites;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.awt.Color;
+
+import javax.imageio.ImageIO;
+
+import sandbox.ColorReader;
+
+public class SpriteSheet {
+
+  private BufferedImage image;
+  private ColorReader colorReader;
+  private int cellSize; // Based on the sprite sheet, you must set this manually!
+
+  public static final int DEFAULT_CELL_SIZE = 16;
+  
+  public static final SpriteSheet MAIN_SHEET = new SpriteSheet("res/spritesheet.png");
+  public static final SpriteSheet PARTICLE_SPRITE_SHEET = new SpriteSheet("res/particles.png");
+  public static final SpriteSheet PLAYER = new SpriteSheet("res/player.png");
+
+  public SpriteSheet(String filename, int cellSize) {
+    this.cellSize = cellSize;
+    try {
+      Image image = ImageIO.read(new File(filename));
+      BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+      bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+      this.image = bufferedImage;
+
+      colorReader = new ColorReader(this.image);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public SpriteSheet(String filename) {
+    this(filename, DEFAULT_CELL_SIZE);
+  }
+
+  public BufferedImage getImage() {
+    return image;
+  }
+
+  public Color getColor(int x, int y) {
+    return colorReader.getColor(x, y);
+  }
+
+  public int getCellSize() {
+    return cellSize;
+  }
+}
+</file>
+
+<file path="src/com/mauted/sandbox/tiles/GrassTile.java">
+package sandbox.tiles;
+
+import sandbox.sprites.SpriteLibrary;
+
+public class GrassTile extends Tile {
+
+  public GrassTile(float x, float y) {
+    super(SpriteLibrary.GRASS_TILE.getSprite(), x, y);
+  }
+  
+}
+</file>
+
+<file path="src/com/mauted/sandbox/tiles/Tile.java">
+package sandbox.tiles;
+
+import sandbox.GameObject;
+import sandbox.sprites.Sprite;
+import sandbox.sprites.SpriteSheet;
+
+public class Tile extends GameObject {
+
+  private boolean opaque;
+
+  public static final int DEFAULT_TILE_SIZE = SpriteSheet.MAIN_SHEET.getCellSize();
+
+  public Tile(Sprite sprite, float x, float y) {
+    super(sprite, x, y);
+    this.opaque = false;
+  }
+
+  public Tile(float x, float y) {
+    this(null, x, y);
+  }
+
+  public boolean isOpaque() {
+    return opaque;
+  }
+  
+}
+</file>
+
+<file path="src/com/mauted/sandbox/CollisionChecker.java">
+package sandbox;
+
+import java.awt.Rectangle;
+
+import sandbox.entities.Entity;
+
+public class CollisionChecker {
+    private int worldWidth;
+    private int worldHeight;
+
+    public CollisionChecker(int worldWidth, int worldHeight) {
+        this.worldWidth = worldWidth;
+        this.worldHeight = worldHeight;
+    }
+
+    /**
+     * Constrains a GameObject within the world boundaries.
+     * 
+     * @param object the GameObject to constrain
+     */
+    public void constrainToBounds(GameObject object) {
+        double clampedX = Math.max(0, Math.min(object.getX(), worldWidth - object.getWidth()));
+        double clampedY = Math.max(0, Math.min(object.getY(), worldHeight - 2 * object.getHeight()));
+        object.moveTo(clampedX, clampedY);
+    }
+
+    /**
+     * Checks if two GameObjects are colliding.
+     * 
+     * @param a the first GameObject
+     * @param b the second GameObject
+     * @return true if they are colliding, false otherwise
+     */
+    public boolean isColliding(GameObject a, GameObject b) {
+        // return a.getX() < b.getX() + b.getWidth() &&
+        //        a.getX() + a.getWidth() > b.getX() &&
+        //        a.getY() < b.getY() + b.getHeight() &&
+        //        a.getY() + a.getHeight() > b.getY();
+        Rectangle aRect = new Rectangle((int) a.getX(), (int) a.getY(), a.getWidth(), a.getHeight());
+        Rectangle bRect = new Rectangle((int) b.getX(), (int) b.getY(), b.getWidth(), b.getHeight());
+        return aRect.intersects(bRect);
+        
+    }
+
+    /**
+     * Resolves the collision by moving the objects apart.
+     * This function assumes that both objects are rigid bodies.
+     */
+    public void repelObjects(GameObject fromObject, GameObject toObject) {
+        double centerAX = fromObject.getX() + fromObject.getWidth() / 2;
+        double centerAY = fromObject.getY() + fromObject.getHeight() / 2;
+        double centerBX = toObject.getX() + toObject.getWidth() / 2;
+        double centerBY = toObject.getY() + toObject.getHeight() / 2;
+        double deltaX = centerBX - centerAX;
+        double deltaY = centerBY - centerAY;
+
+        // Set a lower bound to prevent division by 0, although nearly impossible.
+        double mag = Math.max(0.001, Math.sqrt(deltaX * deltaX + deltaY * deltaY));
+
+        double unitDeltaX = deltaX / mag / mag;
+        double unitDeltaY = deltaY / mag / mag;
+
+        if (fromObject instanceof Entity) {
+            Entity fromEntity = (Entity) fromObject;
+            if (toObject instanceof Entity) {
+                fromEntity.move(-unitDeltaX * fromEntity.getMaxSpeed(), -unitDeltaY * fromEntity.getMaxSpeed());
+            }
+            else if (Math.abs(deltaX) < Math.abs(deltaY)) {
+                fromEntity.move(0, -fromEntity.getDy());
+            }
+            else {
+                fromEntity.move(-fromEntity.getDx(), 0);
+            }
+        }
+    }
+}
+</file>
+
+<file path="src/com/mauted/sandbox/ColorReader.java">
+package sandbox;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.awt.Color;
+
+public class ColorReader {
+
+    private int width;
+    private int[] pixels;
+
+    public ColorReader(BufferedImage image) {
+        pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+        width = image.getWidth();
+    }
+
+    public Color getColor(int x, int y) {
+        int pos = width * y + x;
+        return getColor(pos);
+    }
+
+    public Color getColor(int index) {
+        int pixel = pixels[index];
+        
+        int alpha = (pixel >> 24) & 0xFF;
+        int red = (pixel >> 16) & 0xFF;
+        int green = (pixel >> 8) & 0xFF;
+        int blue = pixel & 0xFF;
+
+        return new Color(red, green, blue, alpha);
+    }
+}
+</file>
+
+<file path="src/com/mauted/sandbox/GameWrapper.java">
+package sandbox;
+
+import javax.swing.JFrame;
+
+public class GameWrapper extends JFrame {
+  
+  public static final int PIXEL_SIZE = 4; // Game pixel to computer pixel ratio
+  public static final int PADDING = 16;
+  public static final int WIDTH = 160; // Game width
+  public static final int HEIGHT = 144; // Game height
+
+  public GameWrapper() {
+    setTitle("mauricio's sandbox");
+    setSize((WIDTH + PADDING * 2) * PIXEL_SIZE, (HEIGHT + PADDING * 2) * PIXEL_SIZE);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setLocationRelativeTo(null);
+    setResizable(false);
+
+    add(new GamePanel());
+  }
+  
+  public static void main(String[] args) {
+    GameWrapper game = new GameWrapper();
+    game.setVisible(true);
+  }
+}
+</file>
+
+<file path="src/com/mauted/sandbox/StarField.java">
+package sandbox;
+
+public class StarField {
+  private int numberOfStars;
+  private int[] x;
+  private int[] y;
+
+  public StarField(int numberOfStars) {
+    this.numberOfStars = numberOfStars;
+    this.x = new int[numberOfStars];
+    this.y = new int[numberOfStars];
+    for (int i = 0; i < numberOfStars; i++) {
+      x[i] = (int) (Math.random() * GameWrapper.WIDTH);
+      y[i] = (int) (Math.random() * GameWrapper.HEIGHT);
+    }
+  }
+
+  // Getters
+  public int getNumberOfStars() {
+    return numberOfStars;
+  }
+
+  public int getX(int i) {
+    return x[i];
+  }
+
+  public int getY(int i) {
+    return y[i];
+  }
+}
+</file>
+
+<file path="src/com/mauted/sandbox/entities/Entity.java">
+package sandbox.entities;
+
+import sandbox.GameObject;
+import sandbox.sprites.Sprite;
+
+/**
+ * Represents an entity in the game world. An entity is an object that can move and has hit points.
+ * 
+ * @param dx the change in x position
+ * @param dy the change in y position
+ * @param maxSpeed the maximum speed of the entity
+ * @param hitPoints the hit points of the entity
+ */
+public class Entity extends GameObject {
+    private double dx;
+    private double dy;
+    private double maxSpeed;
+    private int hitPoints;
+
+    // TODO Implement mass for collision detection
+    
+    public Entity(Sprite sprite, double x, double y, double maxSpeed, int hitPoints) {
+        super(sprite, x, y);
+        this.hitPoints = hitPoints;
+        this.dx = 0;
+        this.dy = 0;
+        this.maxSpeed = maxSpeed;
+    }
+
+    public void update() {
+        move(dx, dy);
+    }
+
+    public void changeHitPoints(int delta) {
+        hitPoints += delta;
+    }
+
+    public int getHitPoints() {
+        return hitPoints;
+    }
+
+    public double getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public void setDx(double dx) {
+        this.dx = dx;
+    }
+
+    public void setDy(double dy) {
+        this.dy = dy;
+    }
+
+    public void setVelocity(double dx, double dy) {
+        this.setDx(dx);
+        this.setDy(dy);
+    }
+
+    public void addToVelocity(double dx, double dy) {
+        this.dx += dx;
+        this.dy += dy;
+    }
+
+    public void onCollision(GameObject other) {
+        double centerAX = this.getX() + this.getWidth() / 2;
+        double centerAY = this.getY() + this.getHeight() / 2;
+        double centerBX = other.getX() + other.getWidth() / 2;
+        double centerBY = other.getY() + other.getHeight() / 2;
+        double deltaX = centerBX - centerAX;
+        double deltaY = centerBY - centerAY;
+
+        // Set a lower bound to prevent division by 0, although nearly impossible.
+        double mag = Math.max(0.001, Math.sqrt(deltaX * deltaX + deltaY * deltaY));
+
+        double unitDeltaX = deltaX / mag / mag;
+        double unitDeltaY = deltaY / mag / mag;
+
+        if (other instanceof Entity) {
+            this.move(-unitDeltaX * this.getMaxSpeed(), -unitDeltaY * this.getMaxSpeed());
+        }
+        else if (Math.abs(deltaX) < Math.abs(deltaY)) {
+            this.move(0, -this.getDy());
+        }
+        else {
+            this.move(-this.getDx(), 0);
+        }
+    }
+
+    public double getDx() {
+        return this.dx;
+    }
+
+    public double getDy() {
+        return this.dy;
+    }
+}
+</file>
+
+<file path="src/com/mauted/sandbox/entities/Player.java">
+package sandbox.entities;
+
+import sandbox.GamePanel;
+import sandbox.GameWrapper;
+import sandbox.sprites.SpriteLibrary;
+
+public class Player extends Entity {
+
+    public Player(int x, int y) {
+        super(SpriteLibrary.PLAYER_SOUTH.getSprite(), x, y, 1, 100);
+    }
+
+    public void render(GamePanel gamePanel) {
+        gamePanel.renderSprite(getSprite(), GameWrapper.WIDTH / 2, GameWrapper.HEIGHT / 2);
+    }
+
+    /**
+     * Updates the player's sprite when a key is pressed
+     */
+    public void onKeyEvent() {
+        if (this.getDx() == 0 && this.getDy() > 0) {
+            this.setSprite(SpriteLibrary.PLAYER_SOUTH.getSprite());
+        }
+        else if (this.getDx() > 0 && this.getDy() > 0) {
+            this.setSprite(SpriteLibrary.PLAYER_SOUTHEAST.getSprite());
+        }
+        else if (this.getDx() > 0 && this.getDy() == 0) {
+            this.setSprite(SpriteLibrary.PLAYER_EAST.getSprite());
+        }
+        else if (this.getDx() > 0 && this.getDy() < 0) {
+            this.setSprite(SpriteLibrary.PLAYER_NORTHEAST.getSprite());
+        }
+        else if (this.getDx() == 0 && this.getDy() < 0) {
+            this.setSprite(SpriteLibrary.PLAYER_NORTH.getSprite());
+        }
+        else if (this.getDx() < 0 && this.getDy() < 0) {
+            this.setSprite(SpriteLibrary.PLAYER_NORTHWEST.getSprite());
+        }
+        else if (this.getDx() < 0 && this.getDy() == 0) {
+            this.setSprite(SpriteLibrary.PLAYER_WEST.getSprite());
+        }
+        else if (this.getDx() < 0 && this.getDy() > 0) {
+            this.setSprite(SpriteLibrary.PLAYER_SOUTHWEST.getSprite());
+        }
+    }
+  
+}
+</file>
+
+<file path="src/com/mauted/sandbox/sprites/Sprite.java">
+package sandbox.sprites;
+
+import java.awt.Color;
+
+/**
+ * An encoding of a sprite image.
+ * 
+ * @param x thing
+ */
+public class Sprite {
+    private int x; // x position on spreadsheet
+    private int y; // y position on spreadsheet
+    private int width;
+    private int height;
+    private Color[][] colors;
+
+    public Sprite(SpriteSheet spriteSheet, ColorMap colorMap, int xCell, int yCell, int width, int height) {
+        this.x = xCell * spriteSheet.getCellSize();
+        this.y = yCell * spriteSheet.getCellSize();
+        this.width = width * spriteSheet.getCellSize();
+        this.height = height * spriteSheet.getCellSize();
+
+        this.colors = new Color[this.width][this.height];
+        for (int x = 0; x < this.width; x++) {
+            for (int y = 0; y < this.height; y++) {
+                colors[x][y] = colorMap.getColorMap().get(spriteSheet.getColor(this.x + x, this.y + y));
+            }
+        }
+    }
+
+    private Sprite(Color[][] colors) {
+        this.colors = colors;
+        this.width = colors.length;
+        this.height = colors[0].length;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Color getColor(int x, int y) {
+        return colors[x][y];
+    }
+
+    public Sprite brighter() {
+        Color[][] newColors = new Color[this.width][this.height];
+        for (int x = 0; x < this.width; x++) {
+            for (int y = 0; y < this.height; y++) {
+                newColors[x][y] = colors[x][y].brighter();
+            }
+        }
+        return new Sprite(newColors);
+    }
+
+}
+</file>
+
+<file path="src/com/mauted/sandbox/GameObject.java">
+package sandbox;
+
+import sandbox.sprites.Sprite;
+
+public class GameObject {
+    private double x;
+    private double y;
+    private int width;
+    private int height;
+
+    private Sprite sprite;
+    private boolean visible = true;
+    private boolean brighter = false;
+    private boolean visibleHitbox = false;
+    //   private boolean isRigidBody;
+
+    public GameObject(Sprite sprite, double x, double y) {
+        this.sprite = sprite;
+        this.x = x;
+        this.y = y;
+        this.width = sprite.getWidth();
+        this.height = sprite.getHeight();
+    }
+
+    public void update() {
+        // Do nothing
+    }
+
+    /**
+     * Move object by the given offset.
+     * @param dx The horizontal offset
+     * @param dy The vertical offset
+     */
+    public void move(double dx, double dy) {
+        x += dx;
+        y += dy;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean isVisible) {
+        this.visible = isVisible;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void moveTo(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
+
+    public void setBrighter(boolean brighter) {
+        this.brighter = brighter;
+    }
+
+    public void setVisibleHitbox(boolean visibleHitbox) {
+        this.visibleHitbox = visibleHitbox;
+    }
+
+    public boolean intersects(GameObject other) {
+        return this.x < other.x + other.width &&
+            this.x + this.width > other.x &&
+            this.y < other.y + other.height &&
+            this.y + this.height > other.y;
+    }
+
+    public void onCollision(GameObject other) {
+        // Do nothing
+    }
+
+    public void constrainToBounds(double minX, double minY, double maxX, double maxY) {
+        double clampedX = Math.max(minX, Math.min(this.x, maxX - this.width));
+        double clampedY = Math.max(minY, Math.min(this.y, maxY - this.height));
+        this.moveTo(clampedX, clampedY);
+    }
+
+    public void render(GamePanel gamePanel, Camera camera) {
+        if (this.visible) {
+            int x = (int) Math.round(this.x - camera.getCameraX());
+            int y = (int) Math.round(this.y - camera.getCameraY());
+            if (this.brighter) {
+                gamePanel.renderSprite(this.sprite.brighter(), x, y);
+            }
+            else {
+                gamePanel.renderSprite(this.sprite, x, y);
+            }
+        }
+        if (this.visibleHitbox) {
+            int x = (int) Math.round(this.x - camera.getCameraX());
+            int y = (int) Math.round(this.y - camera.getCameraY());
+            gamePanel.renderHitbox(x, y, this.width, this.height);
+        }
+    }
+  
+}
+</file>
+
+<file path="src/com/mauted/sandbox/controllers/PlayerController.java">
+package sandbox.controllers;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import sandbox.entities.Player;
+
+public class PlayerController extends KeyAdapter {
+    private Player player;
+
+    public PlayerController(Player player) {
+        this.player = player;
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_A) {
+            player.setDx(-player.getMaxSpeed());
+            // player.setSprite(SpriteLibrary.PLAYER_LEFT.getSprite());
+        } else if (key == KeyEvent.VK_D) {
+            player.setDx(player.getMaxSpeed());
+            // player.setSprite(SpriteLibrary.PLAYER_RIGHT.getSprite());
+        } else if (key == KeyEvent.VK_W) {
+            player.setDy(-player.getMaxSpeed());
+            // player.setSprite(SpriteLibrary.PLAYER_UP.getSprite());
+        } else if (key == KeyEvent.VK_S) {
+            player.setDy(player.getMaxSpeed());
+            // player.setSprite(SpriteLibrary.PLAYER_DOWN.getSprite());
+        }
+        player.onKeyEvent();
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_A || key == KeyEvent.VK_D) {
+            player.setDx(0);
+        } else if (key == KeyEvent.VK_W || key == KeyEvent.VK_S) {
+            player.setDy(0);
+        }
+        player.onKeyEvent();
+    }
+
+}
+</file>
+
+<file path="src/com/mauted/sandbox/sprites/ColorMap.java">
+package sandbox.sprites;
+
+import java.util.Map;
+import java.awt.Color;
+import java.util.HashMap;
+
+public enum ColorMap {
+
+    PLAYER(new Color[] {
+        Color.black,
+        new Color(214, 118, 47),
+        new Color(232, 189, 81),
+        Color.white
+    }),
+    GRASS_TILE(new Color[] {
+        new Color(32, 68, 52),
+        new Color(46, 98, 74),
+    }),
+    FIRE(new Color[] {
+        Color.orange,
+        Color.yellow
+    }),
+    WATER(new Color[] {
+        new Color(35, 32, 98),
+        new Color(40, 72, 155),
+    }),
+    TREE(new Color[] {
+        new Color(64, 54, 81),
+        new Color(86, 69, 91),
+        new Color(66, 109, 124),
+        new Color(115, 168, 142),
+    }),
+    TALL_GRASS(new Color[] {
+        new Color(25, 50, 52),
+        new Color(46, 98, 74),
+        new Color(104, 176, 72),
+        new Color(202, 218, 97),
+    }),
+    FLOWER(new Color[] {
+        new Color(102, 141, 60),
+        new Color(213, 117, 0),
+        new Color(210, 202, 105),
+    }),
+    CHICKEN(new Color[] {
+        new Color(207, 92, 92),
+        new Color(98, 138, 170),
+        new Color(182, 229, 253),
+        new Color(255, 255, 255),
+    });
+  
+    private Map<Color, Color> colorMap;
+
+    // The colors in the spritesheets based on the following colors
+    private Color[] baseColors = new Color[] {
+        new Color(255, 0, 255), // Magenta (transparent)
+        new Color(127, 0, 127), // Purple (transparent)
+        new Color(0, 0, 0), // Black
+        new Color(85, 85, 85), // Dark Gray
+        new Color(170, 170, 170), // Light Gray
+        new Color(255, 255, 255) // White
+    };
+
+    private ColorMap(Color[] colors) {
+        this.colorMap = new HashMap<Color, Color>() {{
+            put(baseColors[0], new Color(0, 0, 0, 0));
+            put(baseColors[1], new Color(0, 0, 0, 0));
+            for (int i = 2; i < baseColors.length; i++) {
+                put(baseColors[i], i-2 < colors.length ? colors[i-2] : baseColors[i]);
+            }
+        }};
+    }
+
+    public Map<Color, Color> getColorMap() {
+        return colorMap;
+    }
+}
+</file>
+
+<file path="src/com/mauted/sandbox/sprites/SpriteLibrary.java">
+package sandbox.sprites;
+
+public enum SpriteLibrary {
+
+    /**
+     * PLAYER SPRITES
+     */
+    PLAYER_SOUTH(SpriteSheet.PLAYER, ColorMap.PLAYER, 0, 0, 1, 1),
+    PLAYER_SOUTHEAST(SpriteSheet.PLAYER, ColorMap.PLAYER, 0, 1, 1, 1),
+    PLAYER_EAST(SpriteSheet.PLAYER, ColorMap.PLAYER, 1, 0, 1, 1),
+    PLAYER_NORTHEAST(SpriteSheet.PLAYER, ColorMap.PLAYER, 1, 1, 1, 1),
+    PLAYER_NORTH(SpriteSheet.PLAYER, ColorMap.PLAYER, 2, 0, 1, 1),
+    PLAYER_NORTHWEST(SpriteSheet.PLAYER, ColorMap.PLAYER, 2, 1, 1, 1),
+    PLAYER_WEST(SpriteSheet.PLAYER, ColorMap.PLAYER, 3, 0, 1, 1),
+    PLAYER_SOUTHWEST(SpriteSheet.PLAYER, ColorMap.PLAYER, 3, 1, 1, 1),
+
+    GRASS_TILE(SpriteSheet.MAIN_SHEET, ColorMap.GRASS_TILE, 0, 2, 1, 1),
+    FIRE(SpriteSheet.MAIN_SHEET, ColorMap.FIRE, 0, 2, 1, 1),
+    // DIRT(SpriteSheet.MAIN_SHEET, 1, 1, 1, 1),
+    // STONE(SpriteSheet.MAIN_SHEET, 2, 1, 1, 1),
+    WATER(SpriteSheet.MAIN_SHEET, ColorMap.WATER, 1, 2, 1, 1),
+    // SAND(SpriteSheet.MAIN_SHEET, 4, 1, 1, 1);
+    TREE(SpriteSheet.MAIN_SHEET, ColorMap.TREE, 0, 3, 2, 2),
+    TALL_GRASS(SpriteSheet.MAIN_SHEET, ColorMap.TALL_GRASS, 3, 1, 1, 1),
+    FLOWER(SpriteSheet.MAIN_SHEET, ColorMap.FLOWER, 1, 1, 1, 1),
+    CHICKEN(SpriteSheet.MAIN_SHEET, ColorMap.CHICKEN, 0, 5, 1, 1);
+
+    private Sprite sprite;
+
+    private SpriteLibrary(SpriteSheet spriteSheet, ColorMap colorMap, int cellX, int cellY, int cellsSpanX, int cellsSpanY) {
+        this.sprite = new Sprite(spriteSheet, colorMap, cellX, cellY, cellsSpanX, cellsSpanY);
+    }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+}
+</file>
+
+<file path="src/com/mauted/sandbox/GamePanel.java">
+package sandbox;
+import javax.swing.JPanel;
+
+import sandbox.controllers.PlayerController;
+import sandbox.sprites.Sprite;
+import sandbox.world.World;
+import sandbox.world.WorldMap;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
+public class GamePanel extends JPanel implements Runnable {
+    private BufferedImage image;
+    private Thread thread;
+    private boolean running;
+
+    private World world;
+
+    public GamePanel() {
+        image = new BufferedImage(GameWrapper.WIDTH, GameWrapper.HEIGHT, BufferedImage.TYPE_INT_RGB);
+        world = new World(new WorldMap(32, 32));
+        setPreferredSize(new Dimension(GameWrapper.WIDTH * GameWrapper.PIXEL_SIZE, GameWrapper.HEIGHT * GameWrapper.PIXEL_SIZE));
+        addKeyListener(new PlayerController(world.getPlayer()));
+        setFocusable(true);
+        start();
+    }
+
+    private void start() {
+        thread = new Thread(this);
+        running = true;
+        thread.start();
+    }
+
+    @Override
+    public void run() { 
+        while (running) {
+            update();
+            render();
+            repaint();
+            try {
+                Thread.sleep(1000 / 60); // 60 FPS
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void update() {
+        world.update();
+    }
+
+    private void setPixelColor(int x, int y, Color color) {
+        image.setRGB(x, y, color.getRGB());
+    }
+
+    private void render() {
+        Graphics2D g2d = image.createGraphics();
+        g2d.clearRect(0, 0, image.getWidth(), image.getHeight());
+
+        // Draw world
+        world.render(this); // Lock and key mechanism to the renderSprite method
+
+        g2d.dispose();
+    }
+
+    public void renderSprite(Sprite sprite, int x, int y) {
+        for (int i = 0; i < sprite.getWidth(); i++) {
+            for (int j = 0; j < sprite.getHeight(); j++) {
+                if (x + i >= 0 && x + i < GameWrapper.WIDTH && y + j >= 0 && y + j < GameWrapper.HEIGHT && sprite.getColor(i, j).getAlpha() == 255){
+                    setPixelColor(x + i, y + j, sprite.getColor(i, j));
+                }
+            }
+        }
+    }
+
+    public void renderHitbox(int x, int y, int width, int height) {
+        // Draw boundary red
+        for (int i = 0; i < width; i++) {
+            setPixelColor(x + i, y, Color.RED);
+            setPixelColor(x + i, y + height, Color.RED);
+        }
+        for (int i = 0; i < height; i++) {
+            setPixelColor(x, y + i, Color.RED);
+            setPixelColor(x + width, y + i, Color.RED);
+        }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+
+        int x = GameWrapper.PADDING * GameWrapper.PIXEL_SIZE;
+        int y = GameWrapper.PADDING * GameWrapper.PIXEL_SIZE;
+
+        int width = GameWrapper.WIDTH * GameWrapper.PIXEL_SIZE;
+        int height = GameWrapper.HEIGHT * GameWrapper.PIXEL_SIZE;
+
+        int padding = 2 * GameWrapper.PADDING * GameWrapper.PIXEL_SIZE;
+
+        // Make the padding black
+        g2d.setColor(Color.BLACK);
+        g2d.fillRect(0, 0, width + padding, height + padding);
+        g2d.drawImage(image, x, y, width, height, null);
+    }
+}
+</file>
+
+<file path="README.md">
+![image](https://github.com/mauted/sandbox/assets/63406974/c762e56e-fa14-4861-af6b-27abacaddd21)
+
+A proof-of-concept, fun project to emulate retro-style video game graphics using limited color palettes and screen resolution. [Try it](#install-and-use)!
+
+<img width="752" alt="image" src="https://github.com/mauted/sandbox/assets/63406974/0e7f550f-19fe-4b40-8110-f95ff07f6251">
+
+<img width="752" alt="image" src="https://github.com/mauted/sandbox/assets/63406974/9b57a7fb-7a80-4153-bd6f-ec1db8e11038">
+
+## Install and use
+
+1. Compile and run GameWrapper class.
+</file>
+
+<file path="src/com/mauted/sandbox/world/WorldMap.java">
+package sandbox.world;
+
+import sandbox.Camera;
+import sandbox.GamePanel;
+import sandbox.tiles.*;
+
+public class WorldMap {
+
+  private Tile[][] tiles;
+
+  public WorldMap(int width, int height) {
+    tiles = new Tile[width][height];
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < height; y++) {
+        int tileX = x * Tile.DEFAULT_TILE_SIZE;
+        int tileY = y * Tile.DEFAULT_TILE_SIZE;
+        tiles[x][y] = new GrassTile(tileX, tileY);
+      }
+    }
+  }
+
+  public void render(GamePanel gamePanel, Camera camera) {
+    for (int x = 0; x < this.getWidth(); x++) {
+        for (int y = 0; y < this.getHeight(); y++) {
+            Tile tile = this.getTile(x, y);
+            tile.render(gamePanel, camera);
+        }
+    }  
+  }
+
+  public Tile getTile(int x, int y) {
+    return tiles[x][y];
+  }
+
+  public int getWidth() {
+    return tiles.length;
+  }
+
+  public int getHeight() {
+    return tiles[0].length;
+  }
+}
+</file>
+
+<file path="src/com/mauted/sandbox/world/World.java">
+package sandbox.world;
+
+import java.util.HashSet;
+
+import sandbox.Camera;
+import sandbox.GameObject;
+import sandbox.GamePanel;
+import sandbox.entities.*;
+import sandbox.tiles.Tile;
+
+public class World {
+  
+    private Player player;
+    private HashSet<GameObject> objects;
+    private WorldMap worldMap;
+    private Camera camera;
+
+    public World(WorldMap worldMap) {
+        this.worldMap = worldMap;
+        this.player = new Player(worldWidth() / 2, worldHeight() / 2);
+        this.objects = new HashSet<GameObject>();
+        this.camera = new Camera(player, worldWidth(), worldHeight());
+
+        // for (int i = 0; i < 100; i++) {
+        //     Tree tree = new Tree(randomX(), randomY());
+        //     for (GameObject other : this.objects) {
+        //         if (other instanceof Tree && collisionChecker.isColliding(tree, other)) {
+        //             tree = new Tree(randomX(), randomY());
+        //         }
+        //     }
+        //     this.spawnObject(tree);
+        // }
+
+        for (int i = 0; i < 100; i++) {
+            this.spawnObject(new Chicken(randomX(), randomY()));
+        }
+
+        this.spawnObject(player); // Spawn the player
+    }
+
+    private int randomX() {
+        return (int) (Math.random() * worldMap.getWidth()) * Tile.DEFAULT_TILE_SIZE;
+    }
+
+    private int randomY() {
+        return (int) (Math.random() * worldMap.getHeight()) * Tile.DEFAULT_TILE_SIZE;
+    }
+
+    public void update() {
+        for (GameObject obj : this.objects) {
+            obj.update();
+            obj.constrainToBounds(0, 0, worldWidth(), worldHeight());
+
+            boolean flag = false;
+            for (GameObject other : this.objects) {
+                if (obj != other) {
+                    if (obj.intersects(other)) {
+                        flag = (other instanceof Player);
+                        obj.onCollision(other);
+                    }
+                }
+            }
+            obj.setVisibleHitbox(flag);
+        }
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void render(GamePanel gamePanel) {
+        this.worldMap.render(gamePanel, this.camera);  
+
+        for (GameObject entity : this.objects) {
+            entity.render(gamePanel, this.camera);
+        }
+
+        player.render(gamePanel, this.camera);
+    }
+
+    public void spawnObject(GameObject o) {
+        objects.add(o);
+    }
+
+    public int worldWidth() {
+        return worldMap.getWidth() * Tile.DEFAULT_TILE_SIZE;
+    }
+
+    public int worldHeight() {
+        return worldMap.getHeight() * Tile.DEFAULT_TILE_SIZE;
+    }
+
+}
+</file>
+
+</files>

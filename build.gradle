@@ -1,0 +1,104 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.mauted'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+application {
+    mainClass = 'sandbox.GameWrapper'
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['res']
+            exclude 'old-spritesheets/**'
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': application.mainClass.get(),
+            'Implementation-Title': 'Sandbox',
+            'Implementation-Version': version
+        )
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.register('copyJarForPackage', Copy) {
+    dependsOn jar
+    from(layout.buildDirectory.file("libs/sandbox-${version}.jar"))
+    into(layout.buildDirectory.dir('jpackage-input'))
+    rename { 'sandbox.jar' }
+}
+
+tasks.register('jpackageApp', Exec) {
+    group = 'distribution'
+    description = 'Build a macOS Sandbox.app via jpackage (double-clickable)'
+    dependsOn copyJarForPackage
+
+    def outputDir = layout.buildDirectory.dir('jpackage').get().asFile
+    def inputDir = layout.buildDirectory.dir('jpackage-input').get().asFile
+    def appName = 'Sandbox'
+
+    doFirst {
+        delete outputDir
+        outputDir.mkdirs()
+    }
+
+    executable = 'jpackage'
+    args = [
+        '--name', appName,
+        '--app-version', version.toString(),
+        '--input', inputDir.absolutePath,
+        '--main-jar', 'sandbox.jar',
+        '--main-class', application.mainClass.get(),
+        '--type', 'app-image',
+        '--dest', outputDir.absolutePath,
+        '--java-options', '-Dfile.encoding=UTF-8',
+        '--description', "Mauricio's retro sandbox",
+        '--vendor', 'mauted'
+    ]
+
+    doLast {
+        def app = new File(outputDir, "${appName}.app")
+        // Gatekeeper shows "damaged / move to Trash" for unsigned / quarantined apps.
+        // Make runtime files writable, strip quarantine, then ad-hoc codesign.
+        exec { commandLine 'chmod', '-R', 'u+w', app.absolutePath }
+        // Ignore non-zero: some nested files may still refuse xattr clears.
+        def xattrResult = exec {
+            commandLine 'xattr', '-cr', app.absolutePath
+            ignoreExitValue = true
+        }
+        if (xattrResult.exitValue != 0) {
+            logger.warn('xattr cleanup reported errors (often harmless); continuing with codesign')
+        }
+        exec {
+            commandLine 'codesign', '--force', '--deep', '--sign', '-', app.absolutePath
+        }
+        println ""
+        println "Built & signed: ${app.absolutePath}"
+        println "Open with: open \"${app.absolutePath}\""
+        println "Or Finder → double-click Sandbox (drag to Applications / Dock if you like)."
+        println "If macOS still blocks it once: right-click the app → Open."
+    }
+}
+
+tasks.register('openApp', Exec) {
+    group = 'distribution'
+    description = 'Build Sandbox.app (if needed) and open it'
+    dependsOn jpackageApp
+    executable = 'open'
+    args = [layout.buildDirectory.file('jpackage/Sandbox.app').get().asFile.absolutePath]
+}
